@@ -12,4 +12,9 @@ const getUserByEmail = async (email) => {
 	return user;
 }
 
-module.exports = { getUsers, getUserByEmail }
+const getUserByReferal = async (referal) => {
+	let user = await User.find({ referalString: referal }).exec()
+	return user;
+}
+
+module.exports = { getUsers, getUserByEmail, getUserByReferal}

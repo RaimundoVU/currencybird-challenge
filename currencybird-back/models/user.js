@@ -5,8 +5,10 @@ const UserSchema = new Schema({
 	email: { type: String , unique: true},
 	fullName: {type: String},
 	direction: {type: String},
-	genre: {type: String},
-	money: {type: Number}
+	gender: {type: String},
+	money: {type: Number},
+	referalString: {type: String},
+	referedBy: {type: String}
 });
 
 module.exports = mongoose.model('User', UserSchema);

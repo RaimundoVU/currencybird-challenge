@@ -1,10 +1,13 @@
 import { Formik, Field, Form} from 'formik'
 import React, {useState} from 'react';
 import { Link } from "react-router-dom";
+import {getUser} from '../services/api';
 
 
 const CreateInvitationForm: React.FC = () => {
   const [link, setLink] = useState('');
+  const [referal, setReferal] = useState('');
+
   return(
     <div className="w-11/12 max-w-[700px] justify-center items-center py-10 px-5 bg-white border-2 rounded-md flex flex-col">
       <Formik
@@ -12,12 +15,19 @@ const CreateInvitationForm: React.FC = () => {
           email: '',
           fullName: ''
         }}
-        onSubmit={(values) => {
-          console.log(values)
+        onSubmit={async (values) => {
+          let { data } = await getUser(values.email)
           var getUrl = window.location;
           var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-          var generateUrl = baseUrl + 'invite/asdfadsf';
-          setLink(generateUrl)
+          if ( data.user ) {
+            var generateUrl = `${baseUrl}/invite/${data.user.referalString}`;
+            values.fullName = data.user.fullName
+            let referal = data.user.referalString!
+            setReferal(referal)
+            setLink(generateUrl)
+          } else {
+            setLink('error')
+          } 
         }}
       >
         <Form>
@@ -35,7 +45,15 @@ const CreateInvitationForm: React.FC = () => {
 
       </Formik>
       <div className="mt-auto justify-center items-center">
-        {link !== '' ? <Link to="/registration">{link}</Link> : null}
+        {link !== 'error' ? 
+        <Link className="underline" to={`registration/${referal}`} >{link}</Link> : 
+
+        <Link to="registration">Usuario no existe, registrarse</Link>
+        }
+      </div>
+      <div className="mt-8 justify-center items-center">
+        <Link className="text-white bg-green-700 border-2 rounded-md" to="/ranking">Ver Ranking</Link> 
+        
       </div>
     </div>
   )

@@ -44,16 +44,22 @@ app.post('/addUser', async ( req, res ) => {
 	let values = req.body
 	values.referalString = makeReferal(6);
 	let user = new User(values)
-	user.save( (err) => {
-		if (err) res.status(500).send(err)
-	})
+	try {
+		await user.save()
+	} catch(err) {
+		res.status(500).send(err);
+		return;
+	}
 	// modificamos al usuario que es usaron su enlace.
 	if (values.referedBy !== '') {
 		let referalUser = await getUserByReferal(values.referedBy)
 		referalUser[0].money = referalUser[0].money + 5000;
-		referalUser[0].save((err) => {
-			if (err) res.status(500).send(err)
-		});
+		try {
+			await user.save()
+		} catch(err) {
+			res.status(500).send(err);
+			return;
+		}
 	}
 	res.status(200).send(user)
 })

@@ -48,7 +48,7 @@ const CreateInvitationForm: React.FC = () => {
         {link !== 'error' ? 
         <Link className="underline" to={`registration/${referal}`} >{link}</Link> : 
 
-        <Link to="registration">Usuario no existe, registrarse</Link>
+        <Link className="underline" to="registration">Usuario no existe, registrarse</Link>
         }
       </div>
       <div className="mt-8 justify-center items-center">

@@ -2,10 +2,13 @@ import { Formik, Field, Form} from 'formik'
 import { createUser } from '../services/api';
 import React, {useState} from 'react';
 import { useMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const RegistrationForm: React.FC = () => {
   const match = useMatch('registration/:referal');
   const referal  = match != null ? match.params.referal : '';
+  const [resStatus, setStatus ] = useState(0);
+
   return(
     <div className="flex w-full h-screen">
       <div className="flex w-full items-center justify-center">
@@ -27,6 +30,7 @@ const RegistrationForm: React.FC = () => {
                 referedBy: referal
               }
               let newUser = await createUser(user)
+              setStatus(newUser.status)
               return;
             }}
           >
@@ -48,6 +52,10 @@ const RegistrationForm: React.FC = () => {
               </div>
             </Form>
           </Formik>
+          <div>
+          { resStatus === 200 ? <Link to="/" className="underline"> Registro exitoso, volver al inicio </Link> : null}
+          { resStatus === 500 ? <span className="text-red-500"> Email ya esta en uso </span> : null }
+          </div>
         </div>
       </div>
     </div>

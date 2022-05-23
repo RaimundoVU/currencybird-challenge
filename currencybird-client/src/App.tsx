@@ -1,5 +1,5 @@
 import CreateInvitationForm from "./components/CreateInvitationForm";
-import RegistrationForm from "./components/RegistrationForm";
+
 function App() {
   return (
     <div className='flex w-full h-screen'>

@@ -31,8 +31,9 @@ export const createUser = async (values: IUser) => {
       values
     )
     return user;
-  } catch (error) {
-      throw new Error();
+  } catch (error: any | AxiosResponse) {
+    console.log(error.response)
+    return error.response;
   }
 }
 
